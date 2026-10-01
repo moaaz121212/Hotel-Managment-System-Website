@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookings - Luxe Hotel</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .hero-bg {
+            background-image: url('https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .form-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+
+        .btn-primary {
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-900 text-white p-4 sticky top-0 z-10 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{% url 'hotel:home' %}" class="text-2xl font-bold tracking-tight">Luxe Hotel</a>
+            <div class="space-x-6">
+                <a href="{% url 'hotel:home' %}" class="nav-link hover:text-blue-200">Home</a>
+                <a href="{% url 'hotel:room_list' %}" class="nav-link hover:text-blue-200">Rooms</a>
+                <a href="{% url 'hotel:bookings' %}" class="nav-link hover:text-blue-200 font-semibold">Bookings</a>
+                <a href="{% url 'hotel:booking_list' %}" class="nav-link hover:text-blue-200">Booking List</a>
+                <a href="{% url 'hotel:contact' %}" class="nav-link hover:text-blue-200">Contact</a>
+                {% if user.is_authenticated %}
+                    <form action="{% url 'logout' %}" method="post" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link hover:text-blue-200 bg-transparent border-0 p-0">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="nav-link hover:text-blue-200">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg h-96 flex items-center justify-center text-white">
+        <div class="text-center fade-in">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">Book Your Stay</h1>
+            <p class="text-lg md:text-2xl mb-6">Reserve your room for an unforgettable luxury experience.</p>
+        </div>
+    </section>
+
+    <!-- Booking Form Section -->
+    <section class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12 text-gray-800">Make a Reservation</h2>
+            <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-lg form-card">
+                {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'hotel:bookings' %}">
+                        {% csrf_token %}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="check-in" class="block text-sm font-medium text-gray-700">Check-In Date</label>
+                                <input type="date" id="check-in" name="start_date" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required aria-label="Check-in date" placeholder="Select date">
+                            </div>
+                            <div>
+                                <label for="check-out" class="block text-sm font-medium text-gray-700">Check-Out Date</label>
+                                <input type="date" id="check-out" name="end_date" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required aria-label="Check-out date" placeholder="Select date">
+                            </div>
+                            <div>
+                                <label for="category" class="block text-sm font-medium text-gray-700">Room Category</label>
+                                <select id="category" name="category" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required aria-label="Room category">
+                                    <option value="">Select Room Category</option>
+                                    <option value="YES">AC</option>
+                                    <option value="NON">NON-AC</option>
+                                    <option value="LUX">LUXURY</option>
+                                    <option value="DEL">DELUXE</option>
+                                    <option value="KIN">KING</option>
+                                    <option value="QUE">QUEEN</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="guests" class="block text-sm font-medium text-gray-700">Number of Guests</label>
+                                <input type="number" id="guests" name="guests" min="1" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required aria-label="Number of guests" placeholder="Enter number">
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <label for="special-requests" class="block text-sm font-medium text-gray-700">Special Requests</label>
+                            <textarea id="special-requests" name="special-requests" rows="4" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" aria-label="Special requests" placeholder="Any special requests?"></textarea>
+                        </div>
+                        <div class="mt-6 text-center">
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg btn-primary">Submit Booking</button>
+                        </div>
+                    </form>
+                {% else %}
+                    <div class="text-center fade-in">
+                        <p class="text-red-600 mb-4 text-lg font-medium">Please log in to make a booking.</p>
+                        <a href="{% url 'login' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg btn-primary">Login</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-blue-900 text-white py-10">
+        <div class="container mx-auto text-center">
+            <p class="mb-4 text-gray-300">© 2025 Luxe Hotel. All rights reserved.</p>
+            <div class="space-x-6">
+                <a href="{% url 'hotel:contact' %}" class="hover:text-blue-200 transition-colors duration-300">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Date Validation -->
+    <script>
+        // Get today's date in YYYY-MM-DD format
+        const today = new Date().toISOString().split('T')[0];
+
+        // Set minimum date for check-in to today
+        const checkInInput = document.getElementById('check-in');
+        checkInInput.setAttribute('min', today);
+
+        // Set minimum date for check-out based on check-in date
+        const checkOutInput = document.getElementById('check-out');
+        checkInInput.addEventListener('change', function() {
+            const checkInDate = new Date(checkInInput.value);
+            const minCheckOutDate = new Date(checkInDate);
+            minCheckOutDate.setDate(checkInDate.getDate() + 1);
+            const minCheckOutDateStr = minCheckOutDate.toISOString().split('T')[0];
+            checkOutInput.setAttribute('min', minCheckOutDateStr);
+            
+            // Reset check-out date if it's before the new minimum
+            if (checkOutInput.value && new Date(checkOutInput.value) <= checkInDate) {
+                checkOutInput.value = '';
+            }
+        });
+
+        // Ensure check-out is always after check-in
+        checkOutInput.addEventListener('change', function() {
+            const checkInDate = new Date(checkInInput.value);
+            const checkOutDate = new Date(checkOutInput.value);
+            if (checkOutDate <= checkInDate) {
+                alert('Check-out date must be after check-in date.');
+                checkOutInput.value = '';
+            }
+        });
+    </script>
+</body>
+</html>

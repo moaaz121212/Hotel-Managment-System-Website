@@ -1,0 +1,257 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking List - Luxe Hotel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .hero-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1578683014728-c73504a258f9&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            min-height: 450px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-bottom: 5px solid #d4af37;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .hero-bg h1 {
+            font-size: 3.75rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .hero-bg p {
+            font-size: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        .navbar {
+            background-color: #002147;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.75rem;
+            color: white !important;
+            transition: color 0.3s ease;
+        }
+        .navbar-brand:hover {
+            color: #d4af37 !important;
+        }
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #d4af37 !important;
+        }
+        .booking-section {
+            padding: 4rem 0;
+        }
+        .booking-card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: white;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        .booking-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+        }
+        .booking-card .card-body {
+            padding: 2.5rem;
+        }
+        .booking-card h3 {
+            color: #1a3c34;
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+        .booking-card p {
+            color: #4a4a4a;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        .booking-card .btn {
+            font-size: 0.95rem;
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+        }
+        .btn-cancel {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: white;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+        .btn-cancel:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .btn-cancel:disabled {
+            background-color: #e4606d;
+            border-color: #e4606d;
+            cursor: not-allowed;
+        }
+        .alert {
+            border-radius: 10px;
+            background-color: #d4edda;
+            color: #155724;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .empty-state .btn-primary {
+            background-color: #002147;
+            border-color: #002147;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .empty-state .btn-primary:hover {
+            background-color: #001a36;
+            border-color: #001a36;
+            transform: scale(1.05);
+        }
+        footer {
+            background-color: #1a2526;
+            padding: 3rem 0;
+        }
+        footer p, footer a {
+            color: #ced4da;
+            transition: color 0.3s ease;
+        }
+        footer a:hover {
+            color: #d4af37;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'hotel:home' %}">Luxe Hotel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'hotel:home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'hotel:room_list' %}">Rooms</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'hotel:bookings' %}">Bookings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'hotel:booking_list' %}" aria-current="page">Booking List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'hotel:contact' %}">Contact</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg">
+        <div>
+            <h1 class="display-4">Your Bookings</h1>
+            <p class="lead">Manage your luxurious hotel reservations effortlessly.</p>
+        </div>
+    </section>
+
+    <!-- Booking List Section -->
+    <section class="booking-section bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5 fw-bold fs-2">Your Reservations</h2>
+            {% if messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert" aria-live="polite">
+                    {% for message in messages %}
+                        <p class="mb-0">{{ message }}</p>
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+            {% for booking in bookings %}
+                <div class="booking-card mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">Booking ID: {{ booking.id }}</h3>
+                        <p class="card-text"><i class="fas fa-door-closed me-2"></i> Room: {{ booking.room.number }} ({{ booking.room.get_category_display }})</p>
+                        <p class="card-text"><i class="fas fa-sign-in-alt me-2"></i> Check-In: {{ booking.start_date|date:"d M Y, H:i" }}</p>
+                        <p class="card-text"><i class="fas fa-sign-out-alt me-2"></i> Check-Out: {{ booking.end_date|date:"d M Y, H:i" }}</p>
+                        <p class="card-text"><i class="fas fa-users me-2"></i> Guests: {{ booking.guests }}</p>
+                        {% if booking.special_requests %}
+                            <p class="card-text"><i class="fas fa-comment-alt me-2"></i> Special Requests: {{ booking.special_requests }}</p>
+                        {% endif %}
+                        <p class="card-text"><i class="fas fa-user me-2"></i> User: {{ booking.user.username }}</p>
+                        <div class="text-end">
+                            <!-- Cancel booking form submits to cancel_booking view -->
+                            <form method="post" action="{% url 'hotel:cancel_booking' booking.id %}" onsubmit="handleCancelSubmit(this)">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-cancel" aria-label="Cancel booking"><i class="fas fa-trash-alt me-2"></i>Cancel Booking</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="text-center py-5 empty-state">
+                    <i class="fas fa-exclamation-circle fa-3x text-muted mb-3"></i>
+                    <p class="text-muted fs-4">No bookings found. Reserve a room today!</p>
+                    <a href="{% url 'hotel:bookings' %}" class="btn btn-primary mt-3">Make a Booking</a>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p class="mb-0">© 2025 Luxe Hotel. All rights reserved.</p>
+            <div class="mt-2">
+                <a href="{% url 'hotel:contact' %}" class="mx-2">Contact Us</a>
+            </div>
+        </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Cancel Button Script -->
+    <script>
+        function handleCancelSubmit(form) {
+            const button = form.querySelector('button[type="submit"]');
+            button.disabled = true;
+            button.setAttribute('aria-busy', 'true');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Cancelling...';
+            return confirm('Are you sure you want to cancel this booking?');
+        }
+    </script>
+</body>
+</html>

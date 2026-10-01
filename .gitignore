@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django
+*.log
+db.sqlite3
+media/
+staticfiles/
+
+# Environments and secrets
+.env
+.venv/
+venv/
+ENV/
+env/
+
+# Local/editor/build files
+.vscode/
+.idea/
+.pytest_cache/
+.mypy_cache/
+htmlcov/
+coverage.xml
+.coverage*
+build/
+dist/
+*.egg-info/
+CACHEDIR.TAG
+
+# Workspace artifacts unrelated to the hotel app
+desktop-tutorial/
+Cprojectshmshoteltemplatesemail/
+luxh_hotelfinal/
+university_data.json
+gitignore.txt
+Lib/
+Scripts/
+pyvenv.cfg

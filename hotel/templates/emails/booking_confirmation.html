@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation - Luxe Hotel</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; background-color: #f3f4f6; line-height: 1.6;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f3f4f6; padding: 20px;">
+        <tr>
+            <td align="center">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background-color: #1e3a8a; color: #ffffff; text-align: center; padding: 24px; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                            <h1 style="font-size: 28px; font-weight: bold; margin: 0; letter-spacing: 1px;">Luxe Hotel</h1>
+                            <p style="font-size: 16px; margin: 8px 0 0; opacity: 0.9;">Your Stay, Our Pleasure</p>
+                        </td>
+                    </tr>
+                    <!-- Image -->
+                    <tr>
+                        <td style="padding: 0;">
+                            <img src="https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&w=600&q=80" alt="Your room at Luxe Hotel" style="width: 100%; height: auto; display: block; border: 0;">
+                        </td>
+                    </tr>
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 24px;">
+                            <h2 style="font-size: 22px; font-weight: bold; color: #1e3a8a; margin: 0 0 16px;">Your Booking is Confirmed!</h2>
+                            <p style="font-size: 16px; color: #4b5563; margin: 0 0 16px;">
+                                Hi {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %},
+                            </p>
+                            <p style="font-size: 16px; color: #4b5563; margin: 0 0 16px;">
+                                Thank you for choosing Luxe Hotel! We’re delighted to confirm your reservation. Below are the details of your stay:
+                            </p>
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 16px;">
+                                <tr style="border-bottom: 1px solid #e5e7eb;">
+                                    <td style="font-size: 16px; font-weight: 600; color: #4b5563; padding: 12px;">Booking ID</td>
+                                    <td style="font-size: 16px; color: #4b5563; padding: 12px;">{{ booking.reference }}</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #e5e7eb;">
+                                    <td style="font-size: 16px; font-weight: 600; color: #4b5563; padding: 12px;">Check-in</td>
+                                    <td style="font-size: 16px; color: #4b5563; padding: 12px;">{{ booking.checkin_date }}</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #e5e7eb;">
+                                    <td style="font-size: 16px; font-weight: 600; color: #4b5563; padding: 12px;">Check-out</td>
+                                    <td style="font-size: 16px; color: #4b5563; padding: 12px;">{{ booking.checkout_date }}</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #e5e7eb;">
+                                    <td style="font-size: 16px; font-weight: 600; color: #4b5563; padding: 12px;">Room Type</td>
+                                    <td style="font-size: 16px; color: #4b5563; padding: 12px;">{{ booking.room_category }}</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #e5e7eb;">
+                                    <td style="font-size: 16px; font-weight: 600; color: #4b5563; padding: 12px;">Guests</td>
+                                    <td style="font-size: 16px; color: #4b5563; padding: 12px;">{{ booking.guests }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 16px; font-weight: 600; color: #4b5563; padding: 12px;">Total</td>
+                                    <td style="font-size: 16px; color: #4b5563; padding: 12px;">{{ booking.total_amount }}</td>
+                                </tr>
+                            </table>
+                            {% if booking.special_requests %}
+                            <p style="font-size: 16px; color: #4b5563; margin: 0 0 16px;">
+                                <strong>Special Requests:</strong> {{ booking.special_requests }}
+                            </p>
+                            {% endif %}
+                            <p style="font-size: 16px; color: #4b5563; margin: 0 0 16px;">
+                                Need to make changes? Feel free to reach out at <a href="mailto:info@luxe-hotel.com" style="color: #2563eb; text-decoration: underline;">info@luxe-hotel.com</a> or call us at +1-800-555-1234.
+                            </p>
+                            <p style="font-size: 16px; color: #4b5563; margin: 0 0 16px;">
+                                We look forward to welcoming you to Luxe Hotel!
+                            </p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #1e3a8a; color: #d1d5db; text-align: center; padding: 16px; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;">
+                            <p style="font-size: 14px; margin: 0;">© 2025 Luxe Hotel. All rights reserved.</p>
+                            <p style="font-size: 14px; margin: 4px 0 0;">
+                                Questions? Email us at <a href="mailto:info@luxe-hotel.com" style="color: #93c5fd; text-decoration: underline;">info@luxe-hotel.com</a>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

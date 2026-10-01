@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rooms - Luxe Hotel Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .hero-bg {
+            background-image: url('https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1200');
+            background-size: cover;
+            background-position: center;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .room-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .room-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .room-img {
+            transition: transform 0.5s ease;
+        }
+
+        .room-card:hover .room-img {
+            transform: scale(1.05);
+        }
+
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-900 text-white p-4 sticky top-0 z-10 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{% url 'hotel:home' %}" class="text-2xl font-bold tracking-tight">Luxe Hotel</a>
+            <div class="space-x-6">
+                <a href="{% url 'hotel:home' %}" class="nav-link hover:text-blue-200">Home</a>
+                <a href="{% url 'hotel:room_list' %}" class="nav-link hover:text-blue-200 font-semibold">Rooms</a>
+                <a href="{% url 'hotel:bookings' %}" class="nav-link hover:text-blue-200">Bookings</a>
+                <a href="{% url 'hotel:booking_list' %}" class="nav-link hover:text-blue-200">Booking List</a>
+                <a href="{% url 'hotel:contact' %}" class="nav-link hover:text-blue-200">Contact</a>
+                {% if user.is_authenticated %}
+                    <form action="{% url 'logout' %}" method="post" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link hover:text-blue-200 bg-transparent border-0 p-0">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="nav-link hover:text-blue-200">Login</a>
+                    <a href="{% url 'hotel:register' %}" class="nav-link hover:text-blue-200">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg h-96 flex items-center justify-center text-white">
+        <div class="text-center fade-in">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">Our Exquisite Rooms</h1>
+            <p class="text-lg md:text-2xl mb-6">Experience unparalleled luxury and comfort.</p>
+        </div>
+    </section>
+
+    <!-- Rooms Section -->
+    <section class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12 text-gray-800">Explore Our Rooms</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for room in rooms %}
+                    <div class="room-card bg-white rounded-xl shadow-lg overflow-hidden">
+                        {% if room.category == 'SGL' %}
+                            <img src="https://images.unsplash.com/photo-1621293954908-907159247fc8?auto=format&fit=crop&w=1200" alt="Single (Queen) Room" class="room-img w-full h-56 object-cover">
+                        {% elif room.category == 'DBL' %}
+                            <img src="https://images.unsplash.com/photo-1578683014728-c73504a258f9?auto=format&fit=crop&w=1200" alt="Double (King) Room" class="room-img w-full h-56 object-cover">
+                        {% elif room.category == 'SUI' %}
+                            <img src="https://images.unsplash.com/photo-1596436889106-be35e843f974?auto=format&fit=crop&w=1200" alt="Suite (AC Deluxe) Room" class="room-img w-full h-56 object-cover">
+                        {% elif room.category == 'DLX' %}
+                            <img src="https://images.unsplash.com/photo-1618221710640-c0eaaa2adb68?auto=format&fit=crop&w=1200" alt="Deluxe Room" class="room-img w-full h-56 object-cover">
+                        {% elif room.category == 'NAC' %}
+                            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200" alt="Non-AC Room" class="room-img w-full h-56 object-cover">
+                        {% elif room.category == 'LUX' %}
+                            <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200" alt="Luxury Room" class="room-img w-full h-56 object-cover">
+                        {% else %}
+                            <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200" alt="Default Room" class="room-img w-full h-56 object-cover">
+                        {% endif %}
+                        <div class="p-6">
+                            <h3 class="text-2xl font-semibold mb-3 text-gray-800">Room {{ room.number }} - {{ room.get_category_display }}</h3>
+                            <p class="text-gray-600 mb-2">Beds: {{ room.beds }} | Capacity: {{ room.capacity }}</p>
+                            <p class="text-gray-600 mb-2">Status: {% if room.is_booked %}Booked{% else %}Available{% endif %}</p>
+                            <p class="text-gray-500 text-sm mb-4">Category Code: {{ room.category }}</p>
+                            <a href="{% url 'hotel:bookings' %}?room={{ room.id }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-300">Book Now</a>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="text-center text-gray-600 text-lg col-span-full">No rooms available at the moment.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-blue-900 text-white py-10">
+        <div class="container mx-auto text-center">
+            <p class="mb-4 text-gray-300">© 2025 Luxe Hotel Management System. All rights reserved.</p>
+            <div class="space-x-6">
+                <a href="{% url 'hotel:contact' %}" class="hover:text-blue-200 transition-colors duration-300">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
